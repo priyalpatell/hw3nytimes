@@ -1,0 +1,192 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Georgia, Times, serif;
+  padding-left: 30px;
+  padding-right: 30px;
+  max-width: 1240px;
+  margin: auto;
+}
+
+@font-face {
+  font-family: 'ITC Cheltenham Std Book';
+  font-style: normal;
+  font-weight: normal;
+  src: local('ITC Cheltenham Std Book'), url('../../assets/CheltenhamStdBook.woff') format('woff');
+  }
+
+@font-face {
+  font-family: 'ITC Cheltenham Std Light';
+  font-style: normal;
+  font-weight: normal;
+  src: local('ITC Cheltenham Std Light'), url('../../assets/CheltenhamStdLight.woff') format('woff');
+  }
+
+@font-face {
+  font-family: 'Franklin Gothic Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Franklin Gothic Regular'), url('../../assets/FranklinGothic.woff') format('woff');
+  }
+
+h1 {
+  font-family:'ITC Cheltenham Std Book';
+  font-weight: normal;
+  font-size: 1.4em;
+  margin-top: 0;
+}
+
+h2 {
+  font-family:'ITC Cheltenham Std Book';
+  font-weight: light;
+  font-size: 1em;
+  margin-top: 0;
+}
+
+h3 {
+  font-family:'Franklin Gothic Regular';
+  font-weight: normal;
+  font-size: 1em;
+  margin-top: 0;
+  margin-bottom: 0;
+  text-transform: uppercase;
+}
+
+h4 {
+  font-family:'Franklin Gothic Regular';
+  font-weight: normal;
+  font-size: 0.9em;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-weight: 100;
+}
+
+
+
+img {
+  padding: 10px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-areas:
+      'left left middle middle middle right right';
+}
+
+.header {
+  display: flex;
+  position: relative;
+  height: 8em;
+  align-items: center;
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+.header > .title {
+  text-align: center;
+  position: absolute; 
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Chomsky', sans-serif;
+  font-size: 3.5em;
+  font-weight: 100;
+}
+
+#date {
+  font-size: 0.7em;
+  flex: 1;
+  text-align: left;
+  font-family: sans-serif;
+}
+
+hr.s1 {
+  border-top:0.1px solid black;
+  border-bottom:0.1px solid black;
+}
+
+#outer-double {
+  padding-bottom: 10px;
+}
+
+#double {
+  border-top: 0.5px solid black;
+  border-bottom: 0.5px solid black;
+  padding: 1px; 
+  height: 4px;
+}
+
+.main {
+  grid-area: middle;
+  padding: 5px;
+}
+
+.left {
+  grid-area: left;
+  padding: 5px;
+}
+
+.right {
+  grid-area: right;
+  padding: 5px;
+}
+
+/* For each article title */
+.item {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  width: auto;
+  height: auto;
+  border-bottom: 0.5px solid gray;
+}
+
+.item > img {
+  max-width: 100%;
+}
+
+/* Single column for mobile */
+@media screen and (max-width: 768px) {
+  /* main > left > right */
+  .main {grid-area: 1 / span 7;}
+  .left {grid-area: 2 / span 7;}
+  .right {grid-area: 3 / span 7;}
+  .header {height: 2.5em;}
+  .header > .title {font-size: 1.25em;}
+}
+
+/* Double column for tablet */
+@media screen and (768px < width < 1024px) {
+  .grid-container {
+      grid-template-areas: 
+      'left left left left left right right'
+      'left2 left2 left2 left2 left2 right right';
+  }
+  /* Main and Right articles will be stacked */
+  .main {
+      grid-area: left;
+      border-right: 0.5px solid gray;
+  }
+  .left {grid-area: right;}
+  .right {
+      grid-area: left2;
+      border-right: 0.5px solid gray
+  }
+  .header {height: 3.5em;}
+  .header > .title {font-size: 2.5em;}
+}
+
+/* Three columns for desktop */
+@media screen and (min-width: 1024px) {
+  .main {
+      grid-area: middle;
+      border-left: 0.5px solid gray;
+      border-right: 0.5px solid gray;
+  }
+  .left {grid-area: left;}
+  .right {grid-area: right;}
+  .header {height: 5em;}
+  .header > .title {font-size: 2.75em;}
+}
