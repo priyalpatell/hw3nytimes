@@ -6,7 +6,8 @@ export enum LoginState {
 }
 
 class Status {
-    loginState: LoginState = $state(LoginState.None)
+    loginState: LoginState = $state(LoginState.None);
+    email?: String;
     
     logIn(email: String, password: String) {
         if (email == "priyal@ucdavis.edu" && password == "priyalisthebest") {
@@ -16,10 +17,19 @@ class Status {
         } else {
             this.loginState = LoginState.User;
         }
+        this.email = email;
     }
 
     loggingIn() {
         this.loginState = LoginState.Loading;
+    }
+
+    mainpage() {
+        if (this.loginState == LoginState.Loading) {
+            this.loginState = LoginState.None;
+        } else {
+            this.loginState = this.loginState;
+        }
     }
 }
 

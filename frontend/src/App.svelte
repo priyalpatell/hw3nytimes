@@ -4,7 +4,7 @@
   import Login from './routes/Login.svelte';
   import { status, LoginState } from './lib/state/status.svelte'
 
-  let displayDate = $state("");
+  let displayDate = $state();
 
   onMount(() => {
     let date: Date = new Date();
@@ -22,17 +22,17 @@
 
 <nav>
   <div class="header">
-      <div id="date">{displayDate}</div>
-      <div class="title">
-          <span on:click={()=> status.loggingIn()}>The New York Times</span>
-      </div>
+      <div id="date">{status.loginState != LoginState.Loading ? displayDate : ''}</div>
+      <button class="title">
+          <span on:click={()=> status.mainpage()}>The New York Times</span>
+      </button>
       {#if status.loginState == LoginState.Loading}
       {:else if status.loginState == LoginState.None}
-        <button class="login" on:click={()=> status.loggingIn()}>
+        <button class="button" on:click={()=> status.loggingIn()}>
           <h3>Log in</h3>
         </button>
       {:else}
-        <button class="account">
+        <button class="button">
           <h3>Account</h3>
         </button>
       {/if}

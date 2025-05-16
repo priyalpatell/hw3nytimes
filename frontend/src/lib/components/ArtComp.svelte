@@ -7,7 +7,7 @@
 <!-- template for each article component -->
 <article class="item">
     <h1>{data.headline}</h1>
-    <p>
+    <p class="subtitles">
         {data.snippet}
     </p>
     {#if data.image}
