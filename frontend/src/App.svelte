@@ -3,10 +3,12 @@
   import Articles from './routes/Articles.svelte';
   import Login from './routes/Login.svelte';
   import { status, LoginState } from './lib/state/status.svelte'
+  import Test from './routes/Test.svelte';
 
   let displayDate = $state();
 
   onMount(() => {
+
     let date: Date = new Date();
     let formattedDate: String = new Intl.DateTimeFormat('en-US', { 
         weekday: 'long', 
@@ -46,6 +48,7 @@
   {#if status.loginState == LoginState.Loading}
     <Login />
   {:else}
-    <Articles />
+    <Test />
+  <!-- <Articles /> -->
   {/if}
 </main>

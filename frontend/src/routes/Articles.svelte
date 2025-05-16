@@ -6,7 +6,7 @@
     import ArtComp from '../lib/components/ArtComp.svelte'
 
     let articles: Article[] = $state([]);
-  
+    
     /**
      * 1. Fetch API Key
      *
@@ -21,7 +21,7 @@
         const res = await fetch('/api/key');
         const data = await res.json();
         let apiKey = data.apiKey;
-  
+        
         const resultD = await queryArticles(apiKey, "Davis CA");
         let articlesD = await formatArticles(resultD["docs"]);
         const resultS = await queryArticles(apiKey, "Sacramento CA");
