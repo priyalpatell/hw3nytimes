@@ -5,23 +5,31 @@ export enum LoginState {
     Loading = "LOADING"
 }
 
+export enum SidebarState {
+    Acc = "ACCOUNT",
+    Comment = "COMMENT",
+    None = "NONE"
+}
+
 class Status {
     loginState: LoginState = $state(LoginState.None);
     email?: String;
+    sidebar: SidebarState = $state(SidebarState.None);
     
-    logIn(email: String, password: String) {
-        if (email == "priyal@ucdavis.edu" && password == "priyalisthebest") {
+    logIn(email: String, name: String) {
+        if (name == "moderator") {
             this.loginState = LoginState.Mod;
-        } else if (email == "ann@ucdavis.edu" && password == "annisthebest") {
-            this.loginState = LoginState.Mod;
-        } else {
+        } else if (name == "user") {
             this.loginState = LoginState.User;
+        } else if (name == "admin") {
+            this.loginState = LoginState.Mod;
         }
         this.email = email;
     }
 
     loggingIn() {
         this.loginState = LoginState.Loading;
+        window.location.href = "http://localhost:8000/login";
     }
 
     mainpage() {
@@ -30,6 +38,14 @@ class Status {
         } else {
             this.loginState = this.loginState;
         }
+    }
+
+    toggleAccount() {
+        this.sidebar = SidebarState.Acc;
+    };
+
+    closeSidebar() {
+        this.sidebar = SidebarState.None;
     }
 }
 
