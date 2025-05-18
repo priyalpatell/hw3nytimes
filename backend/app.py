@@ -1,7 +1,11 @@
-from flask import Flask, jsonify, send_from_directory, request
+from flask import Flask, jsonify, send_from_directory, request, redirect, session
 import os
 from flask_cors import CORS
 from pymongo import MongoClient
+from authlib.integrations.flask_client import OAuth
+from authlib.common.security import generate_token
+import urllib.parse
+import json
 
 static_path = os.getenv('STATIC_PATH','static')
 template_path = os.getenv('TEMPLATE_PATH','templates')
@@ -27,6 +31,73 @@ comment = {
 
 app = Flask(__name__, static_folder=static_path, template_folder=template_path)
 CORS(app)
+
+app.secret_key = "super secret key"
+
+CORS(app, supports_credentials=True, origins=['http://localhost:5173'])
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['SESSION_COOKIE_SECURE'] = False  # Set True if using HTTPS
+
+
+#------------- START DEX CODE---------------------
+
+oauth = OAuth(app)
+
+nonce = generate_token()
+
+
+oauth.register(
+    name=os.getenv('OIDC_CLIENT_NAME'),
+    client_id=os.getenv('OIDC_CLIENT_ID'),
+    client_secret=os.getenv('OIDC_CLIENT_SECRET'),
+    # server_metadata_url='http://dex:5556/.well-known/openid-configuration',
+    authorization_endpoint="http://localhost:5556/auth",
+    token_endpoint="http://dex:5556/token",
+    jwks_uri="http://dex:5556/keys",
+    userinfo_endpoint="http://dex:5556/userinfo",
+    device_authorization_endpoint="http://dex:5556/device/code",
+    client_kwargs={'scope': 'openid email profile'}
+)
+
+# return redirect(f"http://localhost:5173?access_token={token['access_token']}")
+
+@app.route('/')
+def home():
+    user = session.get('user')
+    if user:
+        return f"<h2>Logged in as {user['email']}</h2><a href='/logout'>Logout</a>"
+    return '<a href="/login">Login with Dex</a>'
+
+@app.route('/login')
+def login():
+    session['nonce'] = nonce
+    redirect_uri = 'http://localhost:8000/authorize'
+    return oauth.flask_app.authorize_redirect(redirect_uri, nonce=nonce)
+
+@app.route('/authorize')
+def authorize():
+    token = oauth.flask_app.authorize_access_token()
+    nonce = session.get('nonce')
+
+    user_info = oauth.flask_app.parse_id_token(token, nonce=nonce)  # or use .get('userinfo').json()
+    session['user'] = user_info
+    print("Session set for user:", user_info['email'])
+
+    return redirect(f'http://localhost:5173')
+
+@app.route('/api/me')
+def me():
+    user = session.get('user')
+    if user:
+        return jsonify(user)
+    return jsonify({'error': 'Unauthorized'}), 401
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/')
+
+#------------- END DEX CODE---------------------
 
 @app.route('/post_comments', methods=['POST'])
 def post_article():
