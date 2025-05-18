@@ -48,7 +48,7 @@
   {#if status.loginState == LoginState.Loading}
     <Login />
   {:else}
-    <!-- <Test /> -->
-    <Articles />
+    <Test />
+    <!-- <Articles /> -->
   {/if}
 </main>

@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, send_from_directory, request
 import os
+import requests
 from flask_cors import CORS
 from pymongo import MongoClient
 
@@ -13,50 +14,61 @@ db = mongo['mydatabase']
 collection = db['articles']
 #collection.insert_one({"test":"Testone"})
 
-comments = {
-    "unique_id":"",
-    "comments": [
-    ],
-    "count": 0
-}
+# template example
 comment = {
     "user": "",
     "body": "",
     "display": True
 }
+comments = {
+    "unique_id":"",
+    "comments": [comment],
+    "count": 0
+}
 
 app = Flask(__name__, static_folder=static_path, template_folder=template_path)
 CORS(app)
 
+@app.route('/get_articles', methods=["GET"])
+def get_articles():
+    city = request.args.get("city")
+    base_url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?"
+    filters = "fq=timesTag.location.contains:" + city
+    query_url = base_url + filters + "&api-key=" + os.getenv('NYT_API_KEY')
+    response = requests.get(query_url)
+    data = response.json()
+    return jsonify(data)
+
 @app.route('/post_comments', methods=['POST'])
-def post_article():
+def post_comments():
     data = request.get_json()
     result = collection.insert_one(data)
     return jsonify({'inserted_id': str(result.inserted_id)})
 
 @app.route('/get_comments', methods=["GET"])
-def get_article():
+def get_comments():
     id = request.args.get("id")
     result = collection.find_one({"test": id})
     result['_id'] = str(result['_id'])
     return jsonify(result)
     
 @app.route('/get_all_comments', methods=['GET'])
-def get_all_articles():
+def get_all_comments():
     result = list(collection.find())
     for r in result:
         r['_id'] = str(r['_id'])
     return jsonify(result)
 
 @app.route('/update_comments', methods=['PUT'])
-def update_article():
+def update_comments():
     data = request.get_json()
-    result = collection.update_one(data.id, data.change)
+    result = collection.update_one(data.get("id"), data.get("change"), True)
     return jsonify({"modified_count": result.modified_count})
 
 @app.route('/delete_comments', methods=['DELETE'])
-def delete_article(id):
-    result = collection.delete_one(id)
+def delete_comments():
+    data = request.get_json()
+    result = collection.delete_one(data)
     return jsonify({"deleted_count": result.deleted_count})
 
 
