@@ -1,9 +1,30 @@
 <script lang="ts">
     import { onMount } from 'svelte';
+	import { redactComment } from '../lib/utils/redactComment'
+
 	let data = $state();
 	let temp = $state();
     onMount(async () => {
 		try {
+			/*
+			// redact a comment
+			let userId = "testval2"
+			const r = await fetch(`http://localhost:8000/get_comments?id=${userId}`);
+			data = await r.json();
+			let newBody = "n"
+			const redactedBody = redactComment(data.data, newBody)
+
+			let params = {"id":{"test":"testval2"}, "change": {"$set":{"data": redactedBody}}}
+			const response = await fetch('http://localhost:8000/update_comments', {
+			method: 'PUT',
+			headers: {
+			'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(params)
+			});
+			const res = await response.json();
+			temp = res.modified_count;
+			*/
 			/*
 			// get nytimes articles
 			let city = "Davis CA";
