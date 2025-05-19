@@ -67,7 +67,7 @@
 			// getting a comment
 			let userId = "testval1"
 			const r = await fetch(`http://localhost:8000/get_comments?id=${userId}`);
-			data = await r.json();
+			let val = await r.json();
 			*/
 			/*
 			// adding a comment

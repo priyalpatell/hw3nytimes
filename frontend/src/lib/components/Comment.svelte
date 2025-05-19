@@ -5,12 +5,31 @@
     export let data;
     // data {articleid, title}
 
-    let newComment = "";
+    let newComment = $state();
     // comment {username, comment, display}
 
     onMount(async () => {
         // call root
-        //status.getComments();
+        let id = data.articleid;
+		const r = await fetch(`http://localhost:8000/get_comments?id=${id}`);
+		let comments = await r.json();
+        if (comments == null) {
+            let params = {"id": data.articleid, "replies": [], "count": 0}
+			const response = await fetch('http://localhost:8000/post_comments', {
+			method: 'POST',
+			headers: {
+			'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(params)
+			});
+			const temp = await response.json();
+			let id_data = temp.inserted_id;
+            console.log(id_data);
+            newComment = params;
+        } else {
+            newComment = comments;
+        }
+        status.putComments(comments.replies);
     });
 
 </script>
