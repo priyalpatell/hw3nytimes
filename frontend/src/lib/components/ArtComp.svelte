@@ -2,7 +2,7 @@
     import { status } from "../state/status.svelte";
 
     // get data from props
-    // data {section, headline, snippet, image, caption}
+    // data {id, section, headline, snippet, image, caption}
     export let data;
 </script>
 

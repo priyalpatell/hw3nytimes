@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { status } from "../state/status.svelte";
+    import { status, LoginState } from "../state/status.svelte";
     export let data;
     // data {user, body, display}
 </script>
@@ -9,9 +9,9 @@
 
 <p>{data.body}</p>
 
-<button>Reply</button>
-<!-- if mod -->
-<button>Redact</button>
-<button>Delete</button>
+{#if status.loginState == LoginState.Mod}
+    <button>Redact</button>
+    <button>Delete</button>
+{/if}
 
-<div class="thinline"></div>
+<div class="thinborder"></div>

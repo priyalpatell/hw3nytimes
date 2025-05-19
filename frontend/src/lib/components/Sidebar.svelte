@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import { status, SidebarState } from '../state/status.svelte'
     import Account from './Account.svelte';
+    import Comment from './Comment.svelte';
 
     let isOpen = status.sidebar !== SidebarState.None;
 
@@ -20,6 +21,11 @@
         const unsubscribe = status.onChange(update);
         return unsubscribe;
     });
+
+    let comment = {
+        "articleid": "123Abc", 
+        "title": "Hi"
+    };
 
 
 </script>
@@ -49,8 +55,7 @@
     {/if}
 
     {#if status.sidebar == SidebarState.Comment}
-        <h2>Comment</h2>
-        <p>This is the sidebar content.</p>
+        <Comment data={comment}/>
     {/if}
 </div>
   

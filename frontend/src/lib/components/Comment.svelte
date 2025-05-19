@@ -1,20 +1,22 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
     import CommentBox from "./CommentBox.svelte";
     import { status } from "../state/status.svelte";
     export let data;
-    // data {myuser, articleid, title}
+    // data {articleid, title}
 
     let newComment = "";
-
-    let comments = $state([]);
     // comment {username, comment, display}
 
     onMount(async () => {
         // call root
-        
+        //status.getComments();
     });
 
 </script>
+
+<h2>{data.title}</h2>
+<div class="thinborder"></div>
 
 <h1>Comments</h1>
 <em>102</em>
@@ -24,3 +26,4 @@
 
 {#each status.comments as comment}
     <CommentBox data={comment} />
+{/each}

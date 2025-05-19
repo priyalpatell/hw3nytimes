@@ -88,6 +88,10 @@ class Status {
         this.comments = comm.concat(this.comments);
     }
 
+    // getComments(articleid: String) {
+
+    // }
+
     private notify() {
         for (const fn of this.listeners) {
             console.log("notify");
