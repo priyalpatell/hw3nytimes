@@ -5,7 +5,6 @@
     export let data;
     // data {articleid, title}
 
-    let newComment = $state();
     // comment {username, comment, display}
 
     onMount(async () => {
@@ -25,11 +24,10 @@
 			const temp = await response.json();
 			let id_data = temp.inserted_id;
             console.log(id_data);
-            newComment = params;
+            status.putComments(params);
         } else {
-            newComment = comments;
+            status.putComments(comments);
         }
-        status.putComments(comments.replies);
     });
 
 </script>
