@@ -15,8 +15,8 @@ mongo_uri = os.getenv("MONGO_URI")
 mongo = MongoClient(mongo_uri)
 #db = mongo.get_default_database()
 db = mongo['mydatabase']
-collection = db['articles']
-#collection.insert_one({"test":"Testone"})
+collection_c = db['comments']
+collection_a = db['articles']
 
 # template example
 comment = {
@@ -100,6 +100,14 @@ def logout():
 
 #------------- END DEX CODE---------------------
 
+# article routes
+@app.route('/contains_articles', methods=["GET"])
+def contains_articles():
+    if collection_a.count_documents({}) == 0:
+        return jsonify({'state': False})
+    else:
+        return jsonify({'state': True})
+
 @app.route('/get_articles', methods=["GET"])
 def get_articles():
     city = request.args.get("city")
@@ -110,22 +118,36 @@ def get_articles():
     data = response.json()
     return jsonify(data)
 
+@app.route('/post_article', methods=["POST"])
+def post_article():
+    data = request.get_json()
+    result = collection_a.insert_one(data)
+    return jsonify({'inserted_id': str(result.inserted_id)})
+
+@app.route('/get_all_articles', methods=["GET"])
+def get_all_articles():
+    result = list(collection_a.find())
+    for r in result:
+        r['_id'] = str(r['_id'])
+    return jsonify(result)
+
+# comment routes
 @app.route('/post_comments', methods=['POST'])
 def post_comments():
     data = request.get_json()
-    result = collection.insert_one(data)
+    result = collection_c.insert_one(data)
     return jsonify({'inserted_id': str(result.inserted_id)})
 
 @app.route('/get_comments', methods=["GET"])
 def get_comments():
     id = request.args.get("id")
-    result = collection.find_one({"test": id})
+    result = collection_c.find_one({"test": id})
     result['_id'] = str(result['_id'])
     return jsonify(result)
     
 @app.route('/get_all_comments', methods=['GET'])
 def get_all_comments():
-    result = list(collection.find())
+    result = list(collection_c.find())
     for r in result:
         r['_id'] = str(r['_id'])
     return jsonify(result)
@@ -133,13 +155,13 @@ def get_all_comments():
 @app.route('/update_comments', methods=['PUT'])
 def update_comments():
     data = request.get_json()
-    result = collection.update_one(data.get("id"), data.get("change"), True)
+    result = collection_c.update_one(data.get("id"), data.get("change"), True)
     return jsonify({"modified_count": result.modified_count})
 
 @app.route('/delete_comments', methods=['DELETE'])
 def delete_comments():
     data = request.get_json()
-    result = collection.delete_one(data)
+    result = collection_c.delete_one(data)
     return jsonify({"deleted_count": result.deleted_count})
 
 
