@@ -26,7 +26,7 @@ comment = {
 }
 comments = {
     "unique_id":"",
-    "comments": [comment],
+    "replies": [comment],
     "count": 0
 }
 
@@ -141,8 +141,9 @@ def post_comments():
 @app.route('/get_comments', methods=["GET"])
 def get_comments():
     id = request.args.get("id")
-    result = collection_c.find_one({"test": id})
-    result['_id'] = str(result['_id'])
+    result = collection_c.find_one({"id": id})
+    if result != None:
+        result['_id'] = str(result['_id'])
     return jsonify(result)
     
 @app.route('/get_all_comments', methods=['GET'])
