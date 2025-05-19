@@ -19,10 +19,11 @@
 <div class="thinborder"></div>
 
 <h1>Comments</h1>
-<em>102</em>
-
+<p>102</p>
+<br>
 <input class="textbox" bind:value={newComment} />
-<button on:click={()=>status.appendComment(newComment)}>Submit</button>
+<button class="btn" on:click={()=>status.appendComment(newComment)}>Submit</button>
+<br>
 
 {#each status.comments as comment}
     <CommentBox data={comment} />

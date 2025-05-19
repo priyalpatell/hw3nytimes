@@ -75,6 +75,17 @@ h4 {
   font-weight: 100;
 }
 
+.username {
+  font-family:'ITC Cheltenham Std Book';
+  font-weight: normal;
+  font-size: 1em;
+  margin-top: 0;
+  padding-top: 0;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  font-weight: 100;
+}
+
 
 .header > .title {
   text-align: center;
@@ -164,6 +175,12 @@ img {
   border-radius: 20%;
 }
 
+.profile {
+  padding: 0;
+  padding-top: 1em;
+}
+
+
 /* ----------Lines---------- */
 
 hr.s1 {
@@ -212,6 +229,7 @@ hr.s1 {
 
 .thinborder {
   border-top: 1px solid #ccc;
+  padding-bottom: 1em;
 }
 
 .greeting {
@@ -228,6 +246,20 @@ hr.s1 {
   padding-bottom: 2rem;
   background:none;
   border: none;
+}
+
+.btn {
+  width: 25%;
+  margin-top: 5px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: black;
+  color: white;
+  border-radius: 4px;
+  font-family:'Franklin Gothic Regular';
+  font-weight: normal;
+  font-size: 0.9em;
+  cursor:pointer;
 }
 
 /* ----------Responsive---------- */
