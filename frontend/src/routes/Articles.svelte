@@ -1,12 +1,11 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { formatArticles } from '../lib/utils/formatArticles'
-    import { queryArticles } from '../lib/utils/queryArticles'
     import type { Article } from '../lib/types/Article'
     import ArtComp from '../lib/components/ArtComp.svelte'
 
     let articles: Article[] = $state([]);
-    
+    let containsArticles = $state();
     /**
      * 1. Fetch API Key
      *
@@ -18,17 +17,37 @@
      */
     onMount(async () => {
       try {
-        const res = await fetch('/api/key');
-        const data = await res.json();
-        let apiKey = data.apiKey;
-        
-        const resultD = await queryArticles(apiKey, "Davis CA");
-        let articlesD = await formatArticles(resultD["docs"]);
-        const resultS = await queryArticles(apiKey, "Sacramento CA");
-        let articlesS = await formatArticles(resultS["docs"]);
-        articles = articlesS.concat(articlesD)
+        const r = await fetch('http://localhost:8000/contains_articles');
+			  let res = await r.json();
+        containsArticles = res.state;
+        console.log(containsArticles);
+        if (containsArticles === false) {
+          // get nytimes articles
+			    let city = "Davis CA";
+			    const reqD = await fetch(`http://localhost:8000/get_articles?city=${city}`);
+			    let davisArticles = await reqD.json();
+          let formatedD = await formatArticles(davisArticles.response.docs);
+          city = "Sacramento CA";
+          const reqS = await fetch(`http://localhost:8000/get_articles?city=${city}`);
+          let sacArticles = await reqS.json();
+          let formatedS = await formatArticles(sacArticles.response.docs);
+          articles = formatedS.concat(formatedD);
+          for (let i = 0; i < articles.length; i++) {
+            const response = await fetch('http://localhost:8000/post_article', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(articles[i])
+            });
+            const temp = await response.json();
+            let id_data = temp.inserted_id;
+            console.log(id_data);
+          }
+          containsArticles = true;
+        }
       } catch (error) {
-        console.error('Failed to fetch API key:', error);
+        console.error('Failed to fetch articles:', error);
       }
     });
   
