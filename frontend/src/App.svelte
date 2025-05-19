@@ -65,6 +65,6 @@
     <!-- <Test /> -->
     <Articles />
   
-    <!-- <Sidebar /> -->
+    <Sidebar />
   {/if}
 </main>

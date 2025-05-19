@@ -1,7 +1,26 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
     import { status, SidebarState } from '../state/status.svelte'
+    import Account from './Account.svelte';
 
-    $: isOpen = status.sidebar !== SidebarState.None;
+    let isOpen = status.sidebar !== SidebarState.None;
+
+    function closeSidebar() {
+        status.sidebar = SidebarState.None;
+        update();
+        console.log("close sidebar");
+    }
+
+    function update() {
+        isOpen = status.sidebar !== SidebarState.None;
+        console.log(isOpen);
+    }
+
+    onMount(() => {
+        const unsubscribe = status.onChange(update);
+        return unsubscribe;
+    });
+
 
 </script>
   
@@ -12,45 +31,24 @@
       background: rgba(0, 0, 0, 0.4);
       z-index: 1000;
     }
+
   
-    .sidebar {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 300px;
-      height: 100vh;
-      background: white;
-      box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
-      padding: 20px;
-      z-index: 1001;
-      transform: translateX(100%);
-      transition: transform 0.3s ease;
-    }
-  
-    .sidebar.active {
-      transform: translateX(0);
-    }
-  
-    .toggle-btn {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 1100;
-    }
 </style>
   
 <!-- Overlay -->
 {#if isOpen}
-    <div class="overlay" on:click={status.closeSidebar}></div>
+    <div class="overlay" on:click={closeSidebar}></div>
 {/if}
   
-  <!-- Sidebar -->
-<div class="sidebar" class:active={isOpen}>
+<!-- Sidebar -->
+<div class="sidebar" class:active={status.sidebar !== SidebarState.None}>
+    <button class="close" on:click={closeSidebar}>X</button>
     <!-- Content -->
     {#if status.sidebar == SidebarState.Acc}
-        <h2>Account</h2>
-        <p>This is the sidebar content.</p>
-    {:else if status.sidebar == SidebarState.Comment}
+        <Account />
+    {/if}
+
+    {#if status.sidebar == SidebarState.Comment}
         <h2>Comment</h2>
         <p>This is the sidebar content.</p>
     {/if}

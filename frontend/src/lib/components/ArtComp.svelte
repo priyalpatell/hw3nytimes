@@ -1,4 +1,6 @@
 <script>
+    import { status } from "../state/status.svelte";
+
     // get data from props
     // data {section, headline, snippet, image, caption}
     export let data;
@@ -14,4 +16,8 @@
     <img src={data.image} alt={data.caption}>
     {:else}
     {/if}
+    <button class="commentbtn" on:click={() => status.toggleComment()}>
+        <img src="https://cdn3.iconfinder.com/data/icons/chat-38/30/chat-bubble-square-1-512.png" alt="Comment icon" width="40" height="40"/>
+        <p>123</p>
+    </button>
 </article>

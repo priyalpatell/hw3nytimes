@@ -66,6 +66,15 @@ h4 {
   font-weight: 100;
 }
 
+.body2 {
+  font-family:'Franklin Gothic Regular';
+  font-weight: normal;
+  font-size: 1em;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-weight: 100;
+}
+
 
 .header > .title {
   text-align: center;
@@ -145,6 +154,15 @@ img {
   cursor:pointer;
 }
 
+.commentbtn {
+  background:none;
+  border: 0.5px solid grey;
+  cursor: pointer;
+  padding-right: 12px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 20%;
+}
 
 /* ----------Lines---------- */
 
@@ -166,45 +184,50 @@ hr.s1 {
 
 /* ----------Sidebar---------- */
 
-/* Overlay background when sidebar is open */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.4);
-  display: none;
-  z-index: 1000;
-}
-
-.overlay.active {
-  display: block;
-}
-
-/* Sidebar styles */
 .sidebar {
   position: fixed;
   top: 0;
-  right: -300px; /* Hidden by default */
+  right: 0;
   width: 300px;
-  height: 100%;
-  background: #fff;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-  transition: right 0.3s ease;
-  z-index: 1001;
+  height: 100vh;
+  background: white;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
   padding: 20px;
+  z-index: 1001;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
 }
 
 .sidebar.active {
-  right: 0;
+  transform: translateX(0);
 }
 
-.toggle-btn {
+.close {
+  padding: 10px;
+  float: right;
+  background:none;
+  border: none;
+  cursor: pointer;
+}
+
+.thinborder {
+  border-top: 1px solid #ccc;
+}
+
+.greeting {
+  text-align: left;
+}
+
+.logout {
   position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 1100;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: left;
+  padding: 1rem;
+  padding-bottom: 2rem;
+  background:none;
+  border: none;
 }
 
 /* ----------Responsive---------- */
