@@ -46,6 +46,8 @@
           }
           containsArticles = true;
         }
+        const req = await fetch('http://localhost:8000/get_all_articles');
+			  articles = await req.json();
       } catch (error) {
         console.error('Failed to fetch articles:', error);
       }
