@@ -11,6 +11,7 @@ import type { Article } from "../types/Article";
 export function formatArticles(json: any): Article[] {
   const sections = ["main", "left", "right"];
   return json.map((item: any, index: number) => ({
+    id: item.uri,
     section: sections[index % sections.length],
     headline: item.headline.main,
     snippet: item.snippet,
