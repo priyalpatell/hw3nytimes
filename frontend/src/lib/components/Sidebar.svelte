@@ -17,6 +17,20 @@
         console.log(isOpen);
     }
 
+    async function commentToDB() {
+        let params = {"id":{"id": status.comments!.id}, "change": {"$set":{"replies": status.comments!.replies, "count": status.comments!.count}}}
+			const response = await fetch('http://localhost:8000/update_comments', {
+			method: 'PUT',
+			headers: {
+			'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(params)
+			});
+			const temp = await response.json();
+			let data = temp.modified_count;
+            console.log(data);
+    }
+
     onMount(() => {
         const unsubscribe = status.onChange(update);
         return unsubscribe;
@@ -48,13 +62,14 @@
   
 <!-- Sidebar -->
 <div class="sidebar" class:active={status.sidebar !== SidebarState.None}>
-    <button class="close" on:click={closeSidebar}>X</button>
     <!-- Content -->
     {#if status.sidebar == SidebarState.Acc}
+        <button class="close" on:click={closeSidebar}>X</button>
         <Account />
     {/if}
 
     {#if status.sidebar == SidebarState.Comment}
+    <button class="close" on:click={() => {closeSidebar(); commentToDB();}}>X</button>
         <Comment data={comment}/>
     {/if}
 </div>

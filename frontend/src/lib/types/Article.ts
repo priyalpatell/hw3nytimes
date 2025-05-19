@@ -7,3 +7,13 @@ export interface Article {
     image?: string;
     caption?: string;
 }
+
+export interface Comments {
+    id: String; 
+    replies: { 
+        user: String; 
+        body: String; 
+        display: boolean 
+    }[]; 
+    count: number;
+}

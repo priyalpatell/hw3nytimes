@@ -1,3 +1,6 @@
+import type { Comments } from "../types/Article";
+
+
 export enum LoginState {
   User = "USER",
   Mod = "MODERATOR",
@@ -18,7 +21,7 @@ class Status {
   email: String = "";
   user: String = "";
   sidebar: SidebarState = $state(SidebarState.None);
-  comments: { user: String; body: String; display: boolean }[] = $state([]);
+  comments?: Comments;
 
   private listeners = new Set<Listener>();
 
@@ -70,7 +73,7 @@ class Status {
     console.log("comment sidebar");
   }
 
-  closeSidebar() {
+  closeSidebar() {   
     this.sidebar = SidebarState.None;
   }
 
@@ -87,11 +90,15 @@ class Status {
         display: true,
       },
     ];
-    this.comments = comm.concat(this.comments);
+    if(this.comments) {
+        console.log(this.comments.replies)
+        this.comments.replies = comm.concat(this.comments.replies);
+        this.comments.count += 1;
+    }
   }
 
-  putComments(comments: { user: String; body: String; display: boolean }[]) {
-    this.comments = comments;
+  putComments(comm: Comments) {
+    this.comments = comm;
   }
 
   private notify() {

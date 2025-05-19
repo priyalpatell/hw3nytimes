@@ -5,6 +5,8 @@
     export let data;
     // data {articleid, title}
 
+    let newComment = "";
+
     // comment {username, comment, display}
 
     onMount(async () => {
@@ -36,12 +38,16 @@
 <div class="thinborder"></div>
 
 <h1>Comments</h1>
-<p>102</p>
+{#if status.comments}
+    <p>{status.comments.count}</p>
+{/if}
 <br>
 <input class="textbox" bind:value={newComment} />
 <button class="btn" on:click={()=>status.appendComment(newComment)}>Submit</button>
 <br>
 
-{#each status.comments as comment}
-    <CommentBox data={comment} />
-{/each}
+{#if status.comments}
+    {#each status.comments.replies as comment}
+        <CommentBox data={comment} />
+    {/each}
+{/if}
